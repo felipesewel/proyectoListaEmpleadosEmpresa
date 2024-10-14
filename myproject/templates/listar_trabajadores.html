@@ -1,0 +1,50 @@
+<!-- listar_trabajadores.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Listado de Trabajadores</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>RUT</th>
+            <th>Nombre</th>
+            <th>Sexo</th>
+            <th>Cargo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trabajador in trabajadores %}
+        <tr>
+            <td>{{ trabajador.rut }}</td>
+            <td>{{ trabajador.nombre }}</td>
+            <td>{{ trabajador.sexo }}</td>
+            <td>{{ trabajador.cargo }}</td>
+            <td>
+                <a href="{% url 'editar_trabajador' trabajador.pk %}" class="btn btn-primary">Editar Trabajador</a>
+
+                <!-- Verificar si el trabajador tiene un contacto de emergencia -->
+                {% if trabajador.contactos_emergencia.count > 0 %}
+                    <a href="{% url 'editar_contacto_emergencia' trabajador.contactos_emergencia.first.pk %}" class="btn btn-warning">Editar Contacto de Emergencia</a>
+                {% else %}
+                    <span class="text-muted">No tiene contacto de emergencia</span>
+                {% endif %}
+
+                <!-- Verificar si el trabajador tiene cargas familiares -->
+                {% if trabajador.cargas_familiares.count > 0 %}
+                    <a href="{% url 'editar_carga_familiar' trabajador.cargas_familiares.first.pk %}" class="btn btn-warning">Editar Carga Familiar</a>
+                {% else %}
+                    <span class="text-muted">No tiene carga familiar</span>
+                {% endif %}
+
+                <!-- Botón para eliminar trabajador -->
+                <a href="{% url 'eliminar_trabajador' trabajador.pk %}" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+
+

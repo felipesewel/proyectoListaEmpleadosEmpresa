@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Agregar nuevo empleado</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ trabajador_form.as_p }}
+
+    <h3>Contactos de Emergencia</h3>
+    {{ contacto_formset.management_form }}
+    {% for form in contacto_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+
+    <h3>Cargas Familiares</h3>
+    {{ carga_familiar_formset.management_form }}
+    {% for form in carga_familiar_formset %}
+        {{ form.as_p }}
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'listar_empleados' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

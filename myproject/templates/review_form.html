@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Dejar una Reseña para {{ book.title }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Guardar Reseña</button>
+</form>
+<a href="{% url 'book_list' %}" class="btn btn-secondary mt-3">Volver a la Lista de Libros</a>
+{% endblock %}

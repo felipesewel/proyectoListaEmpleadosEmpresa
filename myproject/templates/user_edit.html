@@ -1,0 +1,20 @@
+<!-- user_edit.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Editar Perfil</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ trabajador_form.as_p }}
+
+    <h3>Contacto de Emergencia</h3>
+    {{ contacto_form.as_p }}
+
+    <h3>Carga Familiar</h3>
+    {{ carga_familiar_form.as_p }}
+
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</form>
+{% endblock %}
+
