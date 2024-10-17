@@ -62,8 +62,9 @@ def user_edit(request):
         trabajador_form = TrabajadorEditForm(request.POST, instance=trabajador)
         contacto_form = ContactoEmergenciaForm(request.POST, instance=trabajador.contactos_emergencia.first(), prefix='contacto')
         carga_familiar_form = CargaFamiliarForm(request.POST, instance=trabajador.cargas_familiares.first(), prefix='carga')
+        password_form = PasswordChangeForm(user=request.user, data=request.POST)  # Agregar formulario de cambio de contraseña
 
-        if trabajador_form.is_valid() and contacto_form.is_valid() and carga_familiar_form.is_valid():
+        if trabajador_form.is_valid() and contacto_form.is_valid() and carga_familiar_form.is_valid() and password_form.is_valid():
             trabajador_form.save()
 
             # Guardar Contacto de Emergencia
@@ -76,18 +77,24 @@ def user_edit(request):
             carga_familiar.trabajador = trabajador
             carga_familiar.save()
 
+            # Guardar la nueva contraseña
+            password_form.save()
+            update_session_auth_hash(request, password_form.user)  # Mantener la sesión activa
+
+            messages.success(request, 'Tu perfil ha sido actualizado con éxito.')
             return redirect('home')
     else:
         trabajador_form = TrabajadorEditForm(instance=trabajador)
         contacto_form = ContactoEmergenciaForm(instance=trabajador.contactos_emergencia.first(), prefix='contacto')
         carga_familiar_form = CargaFamiliarForm(instance=trabajador.cargas_familiares.first(), prefix='carga')
+        password_form = PasswordChangeForm(user=request.user)  # Mostrar formulario de cambio de contraseña
 
     return render(request, 'user_edit.html', {
         'trabajador_form': trabajador_form,
         'contacto_form': contacto_form,
         'carga_familiar_form': carga_familiar_form,
+        'password_form': password_form,  # Enviar formulario de contraseña a la plantilla
     })
-
 
 @login_required
 def editar_trabajador(request, pk):
